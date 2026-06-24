@@ -60,6 +60,7 @@ fi
 # Install Node.js dependencies only if the node_modules folder is missing.
 # This saves time on later deployments.
 if [ ! -d node_modules ]; then
+  cd "$DEPLOY_PATH"
   npm install
 fi
 
