@@ -31,64 +31,94 @@ body {
     @apply sm:px-10 px-5;
   }
 
+  /* Utility: `.c-space` — responsive horizontal container padding */
+
   .head-text {
     @apply sm:text-4xl text-3xl font-semibold bg-gradient-to-r from-[#BEC1CF] via-[#D5D8EA] to-[#D5D8EA] bg-clip-text text-transparent;
   }
+
+  /* Utility: `.head-text` — large, gradient-clipped heading text */
 
   .nav-ul {
     @apply flex flex-col items-center gap-4 sm:flex-row md:gap-6 relative z-20;
   }
 
+  /* Nav: `.nav-ul` — container for nav items; vertical on mobile, horizontal on larger screens */
+
   .nav-li {
     @apply text-neutral-400 hover:text-white font-generalsans max-sm:hover:bg-black-500 max-sm:w-full max-sm:rounded-md py-2 max-sm:px-5;
   }
+
+  /* Nav: `.nav-li` — individual nav list item styling and mobile hover background */
 
   .nav-li_a {
     @apply text-lg md:text-base hover:text-white transition-colors;
   }
 
+  /* Nav: `.nav-li_a` — anchor inside nav item; handles font size and hover color */
+
   .nav-sidebar {
     @apply absolute left-0 right-0 bg-black-200 backdrop-blur-sm transition-all duration-300 ease-in-out overflow-hidden z-20 mx-auto sm:hidden block;
   }
 
+  /* Nav: `.nav-sidebar` — mobile-only dropdown panel for nav items */
+
   .text-gray-gradient {
     @apply bg-gradient-to-r from-[#BEC1CF] from-60% via-[#D5D8EA] via-60% to-[#D5D8EA] to-100% bg-clip-text text-transparent;
   }
+
+  /* Utility: `.text-gray-gradient` — subtle gray gradient applied to text */
 
   /* button component */
   .btn {
     @apply flex gap-4 items-center justify-center cursor-pointer p-3 rounded-md bg-black-300  transition-all active:scale-95 text-white mx-auto;
   }
 
+  /* Component: `.btn` — primary button layout, spacing, and interaction states */
+
   .btn-ping {
     @apply animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75;
   }
 
+  /* Component: `.btn-ping` — pulsing background ripple for notification buttons */
+
   .btn-ping_dot {
     @apply relative inline-flex rounded-full h-3 w-3 bg-green-500;
   }
+
+  /* Component: `.btn-ping_dot` — solid dot placed above the ping animation */
 
   /* hero section */
   .hero_tag {
     @apply text-center xl:text-6xl md:text-5xl sm:text-4xl text-3xl font-generalsans font-black !leading-normal;
   }
 
+  /* Hero: `.hero_tag` — prominent hero heading with responsive sizes */
+
   /* about section */
   .grid-container {
     @apply w-full h-full border border-black-300 bg-black-200 rounded-lg sm:p-7 p-4 flex flex-col gap-5;
   }
 
+  /* About: `.grid-container` — card-like container with padding and border */
+
   .grid-headtext {
     @apply text-xl font-semibold mb-2 text-white font-generalsans;
   }
+
+  /* About: `.grid-headtext` — section heading inside the grid container */
 
   .grid-subtext {
     @apply text-[#afb0b6] text-base font-generalsans;
   }
 
+  /* About: `.grid-subtext` — muted supporting text for grid cards */
+
   .copy-container {
     @apply cursor-pointer flex justify-center items-center gap-2;
   }
+
+  /* Utility: `.copy-container` — small inline area for copy-to-clipboard actions */
 
   /* projects section  */
   .arrow-btn {
@@ -102,73 +132,107 @@ body {
     );
   }
 
+  /* Projects: `.arrow-btn` — circular arrow control with subtle gradient */
+
   .tech-logo {
     @apply w-10 h-10 rounded-md p-2 bg-neutral-100/10 backdrop-filter backdrop-blur-lg flex justify-center items-center;
   }
+
+  /* Projects: `.tech-logo` — small badge for technology logos with blur background */
 
   /* clients section */
   .client-container {
     @apply grid md:grid-cols-2 grid-cols-1 gap-5 mt-12;
   }
 
+  /* Clients: `.client-container` — responsive two-column layout for testimonials */
+
   .client-review {
     @apply rounded-lg md:p-10 p-5 col-span-1 bg-black-300/50;
   }
 
+  /* Clients: `.client-review` — individual testimonial card styling */
+
   .client-content {
     @apply flex lg:flex-row flex-col justify-between lg:items-center items-start gap-5 mt-7;
   }
+
+  /* Clients: `.client-content` — layout for client meta and review text */
 
   /*  work experience section */
   .work-container {
     @apply grid lg:grid-cols-3 grid-cols-1 gap-5 mt-12;
   }
 
+  /* Work: `.work-container` — grid layout for experience cards and canvas */
+
   .work-canvas {
     @apply col-span-1 rounded-lg bg-black-200 border border-black-300;
   }
+
+  /* Work: `.work-canvas` — placeholder panel for 3D canvas or visuals */
 
   .work-content {
     @apply col-span-2 rounded-lg bg-black-200 border border-black-300;
   }
 
+  /* Work: `.work-content` — content panel for experience descriptions */
+
   .work-content_container {
     @apply grid grid-cols-[auto_1fr] items-start gap-5  transition-all ease-in-out duration-500 cursor-pointer hover:bg-black-300 rounded-lg sm:px-5 px-2.5;
   }
+
+  /* Work: `.work-content_container` — grid layout with logo column and content column */
 
   .work-content_logo {
     @apply rounded-3xl w-16 h-16 p-2 bg-black-600;
   }
 
+  /* Work: `.work-content_logo` — rounded container for company/project logos */
+
   .work-content_bar {
     @apply flex-1 w-0.5 mt-4 h-full bg-black-300 group-hover:bg-black-500 group-last:hidden;
   }
+
+  /* Work: `.work-content_bar` — vertical separator/connector used in timeline layouts */
 
   /* contact section */
   .contact-container {
     @apply max-w-xl relative z-10 sm:px-10 px-5 mt-12;
   }
 
+  /* Contact: `.contact-container` — constrained form wrapper with spacing */
+
   .field-label {
     @apply text-lg text-white-600;
   }
+
+  /* Contact: `.field-label` — label text for form fields */
 
   .field-input {
     @apply w-full bg-black-300 px-5 py-2 min-h-14 rounded-lg placeholder:text-white-500 text-lg text-white-800 shadow-black-200 shadow-2xl focus:outline-none;
   }
 
+  /* Contact: `.field-input` — styled input/textarea with padding and shadow */
+
   .field-btn {
     @apply bg-black-500 px-5 py-2 min-h-12 rounded-lg shadow-black-200 shadow-2xl flex justify-center items-center text-lg text-white gap-3;
   }
+
+  /* Contact: `.field-btn` — submit button styling for contact form */
 
   .field-btn_arrow {
     @apply w-2.5 h-2.5 object-contain invert brightness-0;
   }
 
+  /* Contact: `.field-btn_arrow` — small arrow icon inside form buttons */
+
   /*  footer */
   .social-icon {
     @apply w-12 h-12 rounded-full flex justify-center items-center bg-black-300 border border-black-200;
   }
+
+  /* Footer: `.social-icon` — circular social link button with border */
 }
 
 .waving-hand {
@@ -179,6 +243,8 @@ body {
   display: inline-block;
 }
 
+/* Utility: `.waving-hand` — gives an inline element a waving rotation animation */
+
 .arrow-gradient {
   background-image: linear-gradient(
     to right,
@@ -188,6 +254,8 @@ body {
     rgba(255, 255, 255, 0.025) 100%
   );
 }
+
+/* Utility: `.arrow-gradient` — re-usable subtle gradient used for arrow controls */
 
 @keyframes wave-animation {
   0% {

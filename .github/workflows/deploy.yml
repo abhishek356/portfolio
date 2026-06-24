@@ -1,0 +1,60 @@
+name: Deploy to Google Compute Engine
+
+on:
+  # Run this workflow whenever code is pushed to the main branch
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    # Use a fresh Ubuntu machine hosted by GitHub Actions
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Download the repository code into the runner
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up SSH authentication so GitHub Actions can reach the VM
+      - name: Configure SSH access
+        env:
+          # Read secrets from GitHub repository settings
+          SSH_PRIVATE_KEY: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.GCP_VM_HOST }}
+          SSH_USERNAME: ${{ secrets.GCP_VM_USERNAME }}
+          SSH_PORT: ${{ secrets.GCP_VM_PORT || '22' }}
+        run: |
+          # Create the SSH folder and save the private key
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          # Allow SSH to trust the VM host key
+          ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      # Step 3: Connect to the VM, copy the deployment script, and run it so PM2 can manage the app
+      - name: Deploy to GCE
+        env:
+          SSH_HOST: ${{ secrets.GCP_VM_HOST }}
+          SSH_USERNAME: ${{ secrets.GCP_VM_USERNAME }}
+          SSH_PORT: ${{ secrets.GCP_VM_PORT || '22' }}
+          DEPLOY_PATH: ${{ secrets.GCP_DEPLOY_PATH }}
+          GITHUB_SERVER_URL: ${{ github.server_url }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          # Make sure required deployment settings exist
+          if [ -z "$SSH_HOST" ] || [ -z "$SSH_USERNAME" ] || [ -z "$DEPLOY_PATH" ]; then
+            echo "Missing required GitHub secrets: GCP_VM_HOST, GCP_VM_USERNAME, or GCP_DEPLOY_PATH"
+            exit 1
+          fi
+
+          # Create the target directory on the VM if needed
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -p "$SSH_PORT" "$SSH_USERNAME@$SSH_HOST" "mkdir -p '$DEPLOY_PATH'"
+
+          # Copy the deployment script to the VM
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -P "$SSH_PORT" scripts/deploy.sh "$SSH_USERNAME@$SSH_HOST:$DEPLOY_PATH/deploy.sh"
+
+          # Run the remote deployment script on the VM
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -p "$SSH_PORT" "$SSH_USERNAME@$SSH_HOST" "chmod +x '$DEPLOY_PATH/deploy.sh' && DEPLOY_PATH='$DEPLOY_PATH' GITHUB_SERVER_URL='$GITHUB_SERVER_URL' GITHUB_REPOSITORY='$GITHUB_REPOSITORY' bash '$DEPLOY_PATH/deploy.sh'"

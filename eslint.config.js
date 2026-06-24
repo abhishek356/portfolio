@@ -4,6 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
+import ReactThreeFiber from '@react-three/eslint-plugin'
 
 export default defineConfig([
   globalIgnores(['dist']),
@@ -18,5 +19,13 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    plugins: {
+      reactHooks,
+      reactRefresh,
+      '@react-three':ReactThreeFiber
+    },
+    rules:{
+      "react/no-unknown-property": "off",
+    }
   },
 ])
