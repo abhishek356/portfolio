@@ -19,11 +19,11 @@ jobs:
       # Step 2: Set up SSH authentication so GitHub Actions can reach the VM
       - name: Configure SSH access
         env:
-          # Read secrets from GitHub repository settings
-          SSH_PRIVATE_KEY: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
-          SSH_HOST: ${{ secrets.GCP_VM_HOST }}
-          SSH_USERNAME: ${{ secrets.GCP_VM_USERNAME }}
-          SSH_PORT: ${{ secrets.GCP_VM_PORT || '22' }}
+          # Read deployment values from GitHub secrets or repository variables
+          SSH_PRIVATE_KEY: ${{ secrets.GCP_SSH_PRIVATE_KEY || vars.GCP_SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.GCP_VM_HOST || vars.GCP_VM_HOST }}
+          SSH_USERNAME: ${{ secrets.GCP_VM_USERNAME || vars.GCP_VM_USERNAME }}
+          SSH_PORT: ${{ secrets.GCP_VM_PORT || vars.GCP_VM_PORT || '22' }}
         run: |
           # Create the SSH folder and save the private key
           mkdir -p ~/.ssh
@@ -37,16 +37,20 @@ jobs:
       # Step 3: Connect to the VM, copy the deployment script, and run it so PM2 can manage the app
       - name: Deploy to GCE
         env:
-          SSH_HOST: ${{ secrets.GCP_VM_HOST }}
-          SSH_USERNAME: ${{ secrets.GCP_VM_USERNAME }}
-          SSH_PORT: ${{ secrets.GCP_VM_PORT || '22' }}
-          DEPLOY_PATH: ${{ secrets.GCP_DEPLOY_PATH }}
+          SSH_HOST: ${{ secrets.GCP_VM_HOST || vars.GCP_VM_HOST }}
+          SSH_USERNAME: ${{ secrets.GCP_VM_USERNAME || vars.GCP_VM_USERNAME }}
+          SSH_PORT: ${{ secrets.GCP_VM_PORT || vars.GCP_VM_PORT || '22' }}
+          DEPLOY_PATH: ${{ secrets.GCP_DEPLOY_PATH || vars.GCP_DEPLOY_PATH }}
           GITHUB_SERVER_URL: ${{ github.server_url }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
+          echo "Deploying to host: $SSH_HOST"
+          echo "Using username: $SSH_USERNAME"
+          echo "Deploy path: $DEPLOY_PATH"
+
           # Make sure required deployment settings exist
           if [ -z "$SSH_HOST" ] || [ -z "$SSH_USERNAME" ] || [ -z "$DEPLOY_PATH" ]; then
-            echo "Missing required GitHub secrets: GCP_VM_HOST, GCP_VM_USERNAME, or GCP_DEPLOY_PATH"
+            echo "Missing required deployment values. Check GitHub secrets or repository variables for GCP_VM_HOST, GCP_VM_USERNAME, and GCP_DEPLOY_PATH."
             exit 1
           fi
 

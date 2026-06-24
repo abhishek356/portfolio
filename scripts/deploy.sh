@@ -3,10 +3,12 @@ set -euo pipefail
 
 # Define the GitHub repository URL to clone from.
 # If REPO_URL is not provided, it will be built from GITHUB_SERVER_URL and GITHUB_REPOSITORY.
-REPO_URL="${REPO_URL:-${GITHUB_SERVER_URL:-https://github.com}/${GITHUB_REPOSITORY:abhishek356/portfolio}.git}"
+REPO_URL="${REPO_URL:-${GITHUB_SERVER_URL:-https://github.com}/${GITHUB_REPOSITORY:-abhishek356/portfolio}.git}"
 
 # Target folder on the remote VM where the project will live.
-DEPLOY_PATH="${DEPLOY_PATH:-/home/$USER/app}"
+# Use the current user's home directory so the path is always writable for that account.
+DEFAULT_DEPLOY_PATH="${HOME:-/home/$USER}/app"
+DEPLOY_PATH="${DEPLOY_PATH:-$DEFAULT_DEPLOY_PATH}"
 
 # Application name used for the log file.
 APP_NAME="${APP_NAME:-portfolio}"
@@ -46,11 +48,11 @@ npm run build
 
 # Stop any existing PM2 process for this app before starting a new one.
 pm2_process_name="${APP_NAME}-preview"
-pm2 --silent delete "$npm2_process_name" >/dev/null 2>&1 || true
+pm2 --silent delete "$pm2_process_name" >/dev/null 2>&1 || true
 
 # Start the preview server through PM2 so it stays alive and can be managed easily.
 pm2 start "npm run preview -- --host 0.0.0.0 --port 3000" \
-  --name "$npm2_process_name" \
+  --name "$pm2_process_name" \
   --cwd "$DEPLOY_PATH" \
   --log "$DEPLOY_PATH/$APP_NAME.log"
 
