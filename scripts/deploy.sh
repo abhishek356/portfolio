@@ -6,11 +6,11 @@ set -euo pipefail
 REPO_URL="${REPO_URL:-${GITHUB_SERVER_URL:-https://github.com}/${GITHUB_REPOSITORY:-abhishek356/portfolio}.git}"
 
 # Target folder on the remote VM where the project will live.
-# Use the current user's home directory so the path is always writable for that account.
-# DEFAULT_DEPLOY_PATH="${HOME:-/home/$USER}/app"
-DEFAULT_DEPLOY_PATH="${HOME:-/home/app}"
-
-DEPLOY_PATH="${DEPLOY_PATH:-$DEFAULT_DEPLOY_PATH}"
+# This should be passed explicitly from the workflow via the GCP_DEPLOY_PATH value.
+if [ -z "${DEPLOY_PATH:-}" ]; then
+  echo "DEPLOY_PATH is not set. Please provide a writable directory on the VM." >&2
+  exit 1
+fi
 
 # Application name used for the log file.
 APP_NAME="${APP_NAME:-portfolio}"

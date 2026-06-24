@@ -55,10 +55,10 @@ jobs:
           fi
 
           # Create the target directory on the VM if needed
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -p "$SSH_PORT" "$SSH_USERNAME@$SSH_HOST" "mkdir -p '$DEPLOY_PATH'"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -p "$SSH_PORT" "$SSH_USERNAME@$SSH_HOST" "mkdir -p \"$DEPLOY_PATH\""
 
           # Copy the deployment script to the VM
           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -P "$SSH_PORT" scripts/deploy.sh "$SSH_USERNAME@$SSH_HOST:$DEPLOY_PATH/deploy.sh"
 
           # Run the remote deployment script on the VM
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -p "$SSH_PORT" "$SSH_USERNAME@$SSH_HOST" "chmod +x '$DEPLOY_PATH/deploy.sh' && DEPLOY_PATH='$DEPLOY_PATH' GITHUB_SERVER_URL='$GITHUB_SERVER_URL' GITHUB_REPOSITORY='$GITHUB_REPOSITORY' bash '$DEPLOY_PATH/deploy.sh'"
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_ed25519 -p "$SSH_PORT" "$SSH_USERNAME@$SSH_HOST" "chmod +x \"$DEPLOY_PATH/deploy.sh\" && DEPLOY_PATH=\"$DEPLOY_PATH\" GITHUB_SERVER_URL=\"$GITHUB_SERVER_URL\" GITHUB_REPOSITORY=\"$GITHUB_REPOSITORY\" bash \"$DEPLOY_PATH/deploy.sh\""
