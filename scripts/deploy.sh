@@ -47,14 +47,18 @@ mkdir -p "$DEPLOY_PATH"
 # Move into the deployment directory so the commands run there.
 cd "$DEPLOY_PATH"
 
-# If this folder is not already a Git repository, clone the project.
-# Otherwise, fetch the latest changes from the selected branch and update the working copy.
-if [ ! -d .git ]; then
-  git clone --branch "$BRANCH" "$REPO_URL" "$DEPLOY_PATH"
-else
+# If the target folder already contains a Git repository, update it.
+# If it is an empty directory, clone the project into it.
+# If it contains files but is not a Git repo, stop and ask the user to clean it up.
+if [ -d .git ]; then
   git fetch origin "$BRANCH"
   git checkout "$BRANCH"
   git pull origin "$BRANCH"
+elif [ -z "$(find . -mindepth 1 -maxdepth 1 -print -quit)" ]; then
+  git clone --branch "$BRANCH" "$REPO_URL" "$DEPLOY_PATH"
+else
+  echo "Deployment path '$DEPLOY_PATH' exists and is not empty. Please remove it or choose a different path." >&2
+  exit 1
 fi
 
 # Install Node.js dependencies only if the node_modules folder is missing.
