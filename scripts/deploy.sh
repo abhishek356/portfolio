@@ -19,7 +19,7 @@ APP_NAME="${APP_NAME:-portfolio}"
 BRANCH="${BRANCH:-main}"
 
 # Create the deployment directory if it does not already exist.
-sudo mkdir -p "$DEPLOY_PATH"
+# sudo mkdir -p "$DEPLOY_PATH"
 
 # Move into the deployment directory so the commands run there.
 cd "$DEPLOY_PATH"
