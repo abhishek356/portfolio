@@ -7,7 +7,9 @@ REPO_URL="${REPO_URL:-${GITHUB_SERVER_URL:-https://github.com}/${GITHUB_REPOSITO
 
 # Target folder on the remote VM where the project will live.
 # Use the current user's home directory so the path is always writable for that account.
-DEFAULT_DEPLOY_PATH="${HOME:-/home/$USER}/app"
+# DEFAULT_DEPLOY_PATH="${HOME:-/home/$USER}/app"
+DEFAULT_DEPLOY_PATH="${HOME:-/home/app}"
+
 DEPLOY_PATH="${DEPLOY_PATH:-$DEFAULT_DEPLOY_PATH}"
 
 # Application name used for the log file.
