@@ -70,8 +70,11 @@ if [ ! -d node_modules ]; then
   npm install
 fi
 
-# Install PM2 globally if it is not already available.
+# Install PM2 locally for the current user if it is not already available.
 if ! command -v pm2 >/dev/null 2>&1; then
+  mkdir -p "$HOME/.npm-global"
+  npm config set prefix "$HOME/.npm-global"
+  export PATH="$HOME/.npm-global/bin:$PATH"
   npm install -g pm2
 fi
 
