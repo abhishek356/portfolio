@@ -18,8 +18,31 @@ APP_NAME="${APP_NAME:-portfolio}"
 # Branch to deploy from.
 BRANCH="${BRANCH:-main}"
 
+# Ensure the VM has the basic tools required for deployment.
+if ! command -v git >/dev/null 2>&1; then
+  echo "git not found. Installing git..."
+  if command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get update
+    sudo apt-get install -y git
+  else
+    echo "apt-get not available. Please install git manually." >&2
+    exit 1
+  fi
+fi
+
+if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
+  echo "node/npm not found. Installing Node.js..."
+  if command -v apt-get >/dev/null 2>&1; then
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo bash -
+    sudo apt-get install -y nodejs
+  else
+    echo "apt-get not available. Please install nodejs/npm manually." >&2
+    exit 1
+  fi
+fi
+
 # Create the deployment directory if it does not already exist.
-# sudo mkdir -p "$DEPLOY_PATH"
+mkdir -p "$DEPLOY_PATH"
 
 # Move into the deployment directory so the commands run there.
 cd "$DEPLOY_PATH"
